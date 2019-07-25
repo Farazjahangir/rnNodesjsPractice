@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View} from 'react-native';
+import AppNavigator from './config/Routes/Routes'
 
-export default class App extends Component{
+export default class App extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Hello react native</Text>
-      </View>
+      <AppNavigator />
     );
   }
 }
