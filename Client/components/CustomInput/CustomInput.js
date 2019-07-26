@@ -5,16 +5,22 @@ import { Container, Header, Content, Form, Item, Input, Label } from 'native-bas
 
 export default class CustomInput extends Component {
     render() {
-        const {label, isSecure=false, inputContainerStyle ,  labelStyle, inputStyle} = this.props
+        const { label,
+            isSecure = false,
+            inputContainerStyle,
+            labelStyle,
+            inputStyle,
+            keyboardType='default'
+        } = this.props
 
         return (
             <View>
-            <Item floatingLabel style={inputContainerStyle}>
-                <Label style={[styles.inputLabel, labelStyle]}>{label}</Label>
-                <Input  secureTextEntry={isSecure} style={[styles.inputText ,  inputStyle]}  />
-            </Item>
-        </View>
-)
+                <Item floatingLabel style={inputContainerStyle}>
+                    <Label style={[styles.inputLabel, labelStyle]}>{label}</Label>
+                    <Input secureTextEntry={isSecure} style={[styles.inputText, inputStyle]} keyboardType={keyboardType} />
+                </Item>
+            </View>
+        )
     }
 }
 
@@ -22,7 +28,7 @@ const styles = StyleSheet.create({
     inputLabel: {
         color: '#ffffffba'
     },
-    inputText:{
+    inputText: {
         color: '#ffffffba'
     }
 });

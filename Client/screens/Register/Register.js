@@ -14,10 +14,10 @@ export default class Login extends Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.p6}>
+                    <TouchableOpacity style={styles.p6} onPress={()=> this.props.navigation.navigate('Login')}>
                         <Text style={styles.signInText}>Signin</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.p6}  onPress={()=> this.props.navigation.navigate('Register')}>
+                    <TouchableOpacity style={styles.p6}>
                     <Text style={styles.signupText}>Signup</Text>
                     </TouchableOpacity>
                 </View>
@@ -25,8 +25,10 @@ export default class Login extends Component {
                 <Image blurRadius={20} source={require('../../assets/images/bg.jpg')} resizeMode="cover" style={styles.background} />
                 <View style={styles.loginContainer}>
                     <CustomInput  label="Username" />
+                    <CustomInput  label="Contact Number" inputContainerStyle={styles.marginY} keyboardType="phone-pad" />
                     <CustomInput  label="Password" isSecure={true} inputContainerStyle={styles.marginY} />
-                    <CustomButton buttonText="Login" />
+                    <CustomInput  label="Confirm Password" isSecure={true} inputContainerStyle={styles.marginY} />
+                    <CustomButton buttonText="Register" />
                 </View>
             </View>
         )
@@ -66,17 +68,17 @@ const styles = StyleSheet.create({
     signupText: {
         textAlign: 'center',
         padding: 8,
-        backgroundColor: '#fff',
+        backgroundColor: '#e74c3c',
         borderRadius: 20,
-        width: 80
+        width: 80,
+        color: '#fff'
     },
      signInText: {
          textAlign: 'center',
          padding: 8,
-         backgroundColor: '#e74c3c',
+        backgroundColor: '#fff',
          borderRadius: 20,
          width: 80,
-         color: '#fff'
      },
      btnContainer: {
          justifyContent: 'flex-end',
