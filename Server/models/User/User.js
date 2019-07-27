@@ -11,7 +11,12 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: [true, "Password is required"]
-    }
+    },
+    created_at: {
+        type: Number,
+        default: Date.now()
+    },
+    token: String
 })
 userSchema.plugin(uniqueValidator , { message: '{PATH} shuold be unique.' });
 module.exports = mongoose.model("user", userSchema);
