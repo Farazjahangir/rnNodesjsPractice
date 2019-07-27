@@ -10,17 +10,18 @@ const constants = require('../../config/constants')
 router.post('/register' , async (req, res)=>{
     const userData = req.body
     const userPassword = userData.password
+
     try{
+        // Password Hashing
         const hash = await bcrypt.hash(userPassword , 10)
         userData.password = hash
+        // Saving user into database
         let user = new User(userData)
         const token = jwt.sign({id: user._id} , constants.SECRET_KEY)    
         user.token = token 
         await user.save()
         user = JSON.parse(JSON.stringify(user))
         delete user.password
-        console.log('Register====>' , user);
-        
         res.send({
             status: 200,
             data: user,
@@ -38,7 +39,9 @@ router.post('/register' , async (req, res)=>{
 router.post('/login' , async (req,res)=>{
     const { userName, password } = req.body
     try{
+        // Finding user
         let user = await User.findOne({ userName })
+        // If user not found
         if(!user){
             res.send({
                 status: 404,
@@ -46,14 +49,16 @@ router.post('/login' , async (req,res)=>{
             })
             return
         }
+        // password verification
         const isVerified = await bcrypt.compare(password, user.password);
+
+        // If password not verified 
         if(!isVerified){
             res.send({
                 status: 404,
                 errMessage: 'Please check you username or password'
             })
         }
-        console.log('USer' , user);
         user = JSON.parse(JSON.stringify(user))
         delete user.password
         res.send({
