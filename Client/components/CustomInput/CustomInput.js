@@ -10,14 +10,15 @@ export default class CustomInput extends Component {
             inputContainerStyle,
             labelStyle,
             inputStyle,
-            keyboardType='default'
+            keyboardType='default',
+            onChange
         } = this.props
 
         return (
             <View>
                 <Item floatingLabel style={inputContainerStyle}>
                     <Label style={[styles.inputLabel, labelStyle]}>{label}</Label>
-                    <Input secureTextEntry={isSecure} style={[styles.inputText, inputStyle]} keyboardType={keyboardType} />
+                    <Input secureTextEntry={isSecure} style={[styles.inputText, inputStyle]} keyboardType={keyboardType} onChangeText={onChange} />
                 </Item>
             </View>
         )
