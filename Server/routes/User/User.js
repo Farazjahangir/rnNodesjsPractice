@@ -21,7 +21,9 @@ router.post('/register' , async (req, res)=>{
         req.body.password = hash
         // Saving user into database
         let user = new User(req.body)
-        const token = jwt.sign({id: user._id} , constants.SECRET_KEY)    
+        const token = jwt.sign({id: user._id} , constants.SECRET_KEY, {
+            expiresIn: '1d' // expires in 365 days
+       })    
         user.token = token 
         await user.save()
         user = JSON.parse(JSON.stringify(user))
@@ -55,7 +57,12 @@ router.post('/login' , async (req,res)=>{
 
         // If password not verified 
         if(!isVerified) throw {message: 'Please check your username or password'}
+        const token = jwt.sign({id: user._id} , constants.SECRET_KEY, {
+            expiresIn: '1d' // expires in 365 days
+       })   
+       await User.findOneAndUpdate({ userName } , {$set: {token}}) 
 
+        
         user = JSON.parse(JSON.stringify(user))
         delete user.password
         res.status(200).send({
@@ -68,12 +75,31 @@ router.post('/login' , async (req,res)=>{
             status: 404,
             errMessage: e.message
         })
-    }
-
-
-    
-    
+    } 
 })
+
+// router.post('/check' , (req,res)=>{
+//     token = req.query.token;
+//     console.log('Token' , token);
+    
+
+//     try{
+//         var decoded = jwt.verify(token, constants.SECRET_KEY);
+//         console.log('Token Valid');
+//         res.send({
+//             message: 'Valid'
+//         })
+//     }
+//     catch(e){
+//         console.log('Errror' , e.message);
+//         res.send({
+//             message: 'Expired'
+//         })
+        
+//     }
+
+//     console.log('Decoded===>' , decoded);
+// })
 
 
 module.exports = router;
