@@ -12,19 +12,21 @@ router.post('/register' , async (req, res)=>{
     // const userData = req.body
     // const userPassword = userData.password
     const { userName , password } = req.body
-    // if(!userName) throw 'Username is Required'
-    if(!password) throw 'Password is Required'
-
+    
     try{
+        if(!userName) throw 'Username is Required'
+        if(!password) throw 'Password is Required'
         // Password Hashing
         const hash = await bcrypt.hash(password , 10)
         req.body.password = hash
         // Saving user into database
         let user = new User(req.body)
+        await user.save()
+
         const token = jwt.sign({id: user._id} , constants.SECRET_KEY, {
             expiresIn: '1d' // expires in 365 days
-       })    
-        user.token = token 
+        })    
+        user.token = token      
         await user.save()
         user = JSON.parse(JSON.stringify(user))
         delete user.password
@@ -33,8 +35,10 @@ router.post('/register' , async (req, res)=>{
         })  
     }
     catch(e){
+        console.log('Error' , e);
+        
         res.status(400).send({
-            errorMessage: e.message
+            errorMessage: e
         })
     }
     
@@ -73,7 +77,7 @@ router.post('/login' , async (req,res)=>{
     catch(e){
         res.status(404).send({
             status: 404,
-            errMessage: e.message
+            errMessage: e
         })
     } 
 })

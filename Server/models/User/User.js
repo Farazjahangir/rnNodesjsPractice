@@ -10,7 +10,8 @@ const userSchema = new Schema({
     contactNumber: Number,
     password: {
         type: String,
-        required: [true, "Password is required"]
+        required: [true, "Password is required"],
+        unique : true 
     },
     created_at: {
         type: Number,
