@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, Image, Dimensions, TouchableOpacity, Alert } from 'react-native'
 import { Container, Header, Content, Form, Item, Input, Label, Right } from 'native-base';
+import axios from 'axios'
+import DropdownAlert from 'react-native-dropdownalert';
 
 import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import helpers from '../../config/helper'
-import axios from 'axios'
 
 const { width , height } = Dimensions.get('window')
 
@@ -14,33 +15,42 @@ export default class Login extends Component {
         userName: '',
         contactNumber: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        showAlert: true
     }
     static navigationOptions = {
         header: null
     }
 
 
-    register = () =>{
-        console.log('REfister');
-        
+    register = async () =>{
         const { userName, contactNumber, password, confirmPassword } = this.state
+        // Errors Cases
+        if(!userName) return this.dropDownAlertRef.alertWithType('error', 'Error', 'Username is required'); 
+        if(!password) return this.dropDownAlertRef.alertWithType('error', 'Error', 'Password is required'); 
+        if(password !== confirmPassword) 
+            return this.dropDownAlertRef.alertWithType('error', 'Error', 'Passwords does not match'); 
+
         const body = {
             userName,
             contactNumber,
             password
         }
-        helpers.fetchApi('/user/register' , body , 'post')
-    }
+        try{
+            const res = await helpers.fetchApi('/user/register' , body , 'post')
+            this.dropDownAlertRef.alertWithType('success', 'Success', 'User Created');             
+       }
 
-    componentDidMount() {
-        console.log('ComponentDidMount');
-        
+       catch(e){
+        this.dropDownAlertRef.alertWithType('error', 'Error', e);            
+       }
     }
     
     render() {
+        const { showAlert } = this.state
         return (
             <View style={styles.mainContainer}>
+                 <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
                 <View style={styles.btnContainer}>
                     <TouchableOpacity style={styles.p6} onPress={()=> this.props.navigation.navigate('Login')}>
                         <Text style={styles.signInText}>Signin</Text>
